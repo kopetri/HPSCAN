@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+/data/
+/checkpoints/
+/runs/
+/wandb/
+lightning_logs/
+*.ckpt
+*.part
+results*.json
+baseline_parameters.json

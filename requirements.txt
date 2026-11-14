@@ -1,0 +1,15 @@
+# Versions used to produce and verify the results in the paper (Python 3.8, CUDA 11.7).
+# Install PyTorch for your CUDA version first, see https://pytorch.org/get-started/previous-versions/
+torch==2.0.0
+torchvision==0.15.1
+lightning==2.0.1
+numpy==1.23.5
+scipy==1.9.3
+scikit-learn==1.2.0
+matplotlib==3.6.2
+opencv-python==4.6.0.66
+tqdm==4.64.1
+huggingface_hub==0.23.2
+# image-based baseline only
+segmentation-models-pytorch==0.3.3
+timm==0.9.2
