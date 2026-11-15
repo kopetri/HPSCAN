@@ -24,6 +24,7 @@ raters agree on that point.
 | `search_baseline_parameters.py` | parameter search of the scikit-learn baselines (Table 3) |
 | `download.py` | download checkpoints and datasets |
 | `tools/` | conversion of the ClustMe data |
+| `improved/` | post-publication improvements (not part of the paper), see [improved/README.md](improved/README.md) |
 | `hpscan/` | model, losses, metrics, datasets and evaluation protocol; `hpscan/paper.py` holds the configuration of every table row |
 
 ## Installation
@@ -229,6 +230,15 @@ code reproduces the original:
 * The image baseline was trained with a crop that leaves a gap between the two halves (margin 1.2)
   and min-max rescales afterwards, plus random flips of the input image. The flips were applied to
   the image only, not to the pixel coordinates of the points. `--model image` reproduces this.
+
+## Improved model (post-publication)
+
+The folder [`improved/`](improved/README.md) contains improvements found after publication; they are not
+part of the paper and do not change any of the code above. Decoding the clusters from HPSCAN's pairwise
+similarities with test-time augmentation, together with a new training recipe, gives a single model that
+outperforms all baselines on PSC (κα 0.70, κv 0.76) and ClustMe (κv 0.65, 88 % accuracy). SDR remains
+difficult; see [improved/README.md](improved/README.md) for the results, the selection protocol and the
+limitations.
 
 ## Citation
 
