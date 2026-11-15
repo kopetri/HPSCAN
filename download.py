@@ -1,6 +1,7 @@
 """Download the released checkpoints and the datasets.
 
     python download.py --checkpoints        # -> checkpoints/*.ckpt (GitHub release assets)
+    python download.py --improved           # -> checkpoints/hpscan_improved.ckpt (post-publication, improved/)
     python download.py --psc                # -> data/PSC (Hugging Face: kopetri/PSC)
     python download.py --sdr                # -> data/SDR (GitHub release asset)
 
@@ -47,15 +48,19 @@ def download_sdr(folder):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--checkpoints", action="store_true")
+    parser.add_argument("--improved", action="store_true", help="checkpoint of the improved model (improved/)")
     parser.add_argument("--psc", action="store_true")
     parser.add_argument("--sdr", action="store_true")
     parser.add_argument("--checkpoint_dir", default="checkpoints")
     parser.add_argument("--data_root", default="data")
     args = parser.parse_args()
-    if not (args.checkpoints or args.psc or args.sdr):
-        parser.error("choose at least one of --checkpoints, --psc, --sdr")
+    if not (args.checkpoints or args.improved or args.psc or args.sdr):
+        parser.error("choose at least one of --checkpoints, --improved, --psc, --sdr")
     if args.checkpoints:
         download_checkpoints(args.checkpoint_dir)
+    if args.improved:
+        from improved import CHECKPOINT
+        download_checkpoints(args.checkpoint_dir, [CHECKPOINT])
     if args.psc:
         download_psc(Path(args.data_root) / "PSC")
     if args.sdr:
