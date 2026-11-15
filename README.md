@@ -40,8 +40,12 @@ pip install -r requirements.txt
 ```bash
 python download.py --checkpoints   # -> checkpoints/
 python download.py --psc           # -> data/PSC  (Hugging Face kopetri/PSC)
-python download.py --sdr           # -> data/SDR  (our annotations of the SDR scatterplots)
+python download.py --sdr           # -> data/SDR  (SDR scatterplots with our annotations)
 ```
+
+**SDR** is released with this repository (`SDR.zip`, release v1.0): 272 scatterplots of the
+dimensionality reduction benchmark of [Sedlmair et al. 2013](https://doi.org/10.1109/TVCG.2013.153),
+annotated with the crowdsourcing procedure of PSC (68 participants).
 
 A dataset folder holds one `.npy` file per scatterplot with shape `(N, 2 + R)`: the x/y position
 of the N points in [-1, 1], followed by the cluster id assigned by each of the R raters (`-1` =
@@ -238,4 +242,9 @@ code reproduces the original:
 }
 ```
 
-Third-party code and licenses: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+## License
+
+The code, the checkpoints and the SDR annotations are released under the [MIT License](LICENSE).
+The SDR scatterplots are derived from the data of Sedlmair et al. 2013. The PSC dataset is
+released under Apache-2.0 on [Hugging Face](https://huggingface.co/datasets/kopetri/PSC).
+Third-party code and its licenses: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
