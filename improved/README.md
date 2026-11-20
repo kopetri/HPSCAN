@@ -74,9 +74,9 @@ cross-validation) closed this gap in our experiments.
 No choice was made on a test set. During development, models were trained on PSC train without 200 held-out
 stimuli (`--holdout 200`, fixed seed); the training variants, the checkpoint epoch and the decoding parameters
 (NOISE threshold ∈ {0.5, 0.7, 0.9}, τ ∈ {0.5, …, 0.98}, min_fraction ∈ {0, 0.03, 0.05}) were selected on the
-held-out stimuli + PSC valid (287 stimuli) with κα + 10 κv. The selected recipe was then trained once on all of
-PSC train for the released checkpoint. The decoding parameters of the paper model were selected on PSC valid,
-which it was not trained on.
+held-out stimuli + PSC valid (87), 287 stimuli in total, with κα + 10 κv. The selected recipe was then trained
+once on all of PSC train for the released checkpoint. The decoding parameters of the paper model were selected on
+PSC valid, which it was not trained on.
 
 Development runs (held-out protocol, three seeds of the selected recipe, not released):
 
@@ -99,3 +99,26 @@ post-processing of the argmax output, and fine-tuning with SDR stimuli.
 Decoding matters for the new models: with the paper's argmax readout they are worse than the paper model
 (PSC −1.74 / 0.62); similarity decoding without test-time augmentation gives 0.43 / 0.74, with 8 views 0.79 / 0.76
 (seed 0).
+
+## Hyperparameter search
+
+After the recipe above was fixed, we searched 18 training hyperparameters: learning rate, weight decay, batch size,
+warm-up, D, the three loss weights, the NOISE class weight, one random rater vs. all raters as target, the pair
+weighting, the probability and strength of the crop, rotation, jitter and point subsets, a random rescaling of the
+[-1, 1] box, and dropout. 47 quasi-random (Sobol) configurations and the released recipe were compared by successive
+halving (48 × 50 epochs → 16 × 150 epochs → 5 × 300 epochs × 2 seeds), each run scored as above on val' only.
+
+The best configuration scored higher on val' than the released recipe (κα + 10 κv 6.74 vs 6.34, mean of two seeds;
+learning rate 3.6e-4, weight decay 0.02, D 185, all raters as target, little jitter). This did not carry over to the
+test sets (trained on all of PSC train, decoding parameters selected on val', `improved/evaluate.py`):
+
+| | PSC test | SDR | ClustMe |
+| --- | --- | --- | --- |
+| released recipe (`hpscan_improved.ckpt`) | 0.70 / 0.76 / 64.08 | −3.16 / 0.56 / 44.35 | 0.65 / 88 % / 59 % |
+| best configuration of the search | −0.19 / 0.67 / 54.44 | −2.20 / 0.53 / 29.89 | 0.65 / 86 % / 55 % |
+
+Its three development runs (held-out protocol) showed the same pattern (κv 0.65–0.68 on PSC
+test vs 0.75–0.77 for the released recipe). It predicts less NOISE, which improves κα on SDR but lowers κv and κn.
+With 48 configurations and a validation set of 287 stimuli, in which the small groups get large weights, the
+validation score of the selected configuration is biased upwards. We therefore kept the released recipe; note that
+this decision was made after looking at the test results above.
